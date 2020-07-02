@@ -90,3 +90,20 @@ for i in range(0,len(graphe)):
     liste_arcs_départs = recursive(liste_arcs_départs)
 
 print(liste_arcs_départs)
+
+print(liste_arcs_départs)
+
+this_distance = 0
+court_distance = 9999
+court_chemin =[]
+
+for element in liste_arcs_départs:
+    this_distance = 0
+    for i in range(0,len(element)-1):
+        this_distance += distance(element[i],element[i+1])
+    if this_distance < court_distance:
+        court_distance = this_distance
+        court_chemin = element
+
+print("le chemin le plus court est :",court_chemin)
+print("la distance a parcourir est de:",court_distance )
