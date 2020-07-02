@@ -11,6 +11,14 @@
 départ = 0
 arrivée = 6
 
+def distance(départ, arrivée) -> int:
+    # on vérifie que les valeurs de départ et arrivée sont bien des entiers
+    assert type(départ) == int, "la valeur départ n'est pas un entier"
+    assert type(arrivée) == int, "la valeur départ n'est pas un entier"
+    assert graphe[départ][arrivée] != 99, "les noeuds ne sont pas adjacent"
+
+    return(graphe[départ][arrivée])
+
 def determine_adjacents(noeud) -> list:
     #*******************************************
     # Assert a faire
