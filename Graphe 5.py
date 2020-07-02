@@ -1,4 +1,8 @@
-﻿graphe = [
+﻿#************************************************************************
+# Transcription du grapghe sous forme de liste de listes
+#************************************************************************
+
+graphe = [
     [0 ,4 ,2 ,99,99,99,99,99],
     [4 ,0 ,6 ,99,5 ,99,99,99],
     [2 ,6 ,0 ,3 ,99,99,99,5 ],
@@ -8,21 +12,28 @@
     [99,99,99,4 ,99,7 ,0 ,10],
     [99,99,5 ,1 ,99,99,10,0 ]
     ]
-départ = 0
-arrivée = 6
 
-def distance(départ, arrivée) -> int:
+def distance(Noeud_A, Noeud_B) -> int:
+    #************************************************************************
+    # Donne la distance entre deux noeuds adjacents Noeud_A et Noeud_B
+    # Entrée : Le noeud de départ
+    # Sortie : la liste des noeuds adjacents
+    #************************************************************************
     # on vérifie que les valeurs de départ et arrivée sont bien des entiers
-    assert type(départ) == int, "la valeur départ n'est pas un entier"
-    assert type(arrivée) == int, "la valeur départ n'est pas un entier"
-    assert graphe[départ][arrivée] != 99, "les noeuds ne sont pas adjacent"
+    assert type(Noeud_A) == int, "la valeur départ n'est pas un entier"
+    assert type(Noeud_B) == int, "la valeur départ n'est pas un entier"
+    assert graphe[Noeud_A][Noeud_B] != 99, "les noeuds ne sont pas adjacent"
 
-    return(graphe[départ][arrivée])
+    # On retourne la distance entre les deux noeuds
+    return(graphe[Noeud_A][Noeud_B])
+
 
 def determine_adjacents(noeud) -> list:
-    #*******************************************
-    # Assert a faire
-    #*******************************************
+    #************************************************************************
+    # A partir d'un noeud en entrée, la fonction donne la liste des noeuds adjacents
+    # Entrée : Le noeud de départ
+    # Sortie : la liste des noeuds adjacents
+    #************************************************************************
     # On sélectionne la ligne contenant les noeuds adjacent par rapport a notre point de départ
     ligne = graphe[noeud]
 
@@ -38,6 +49,8 @@ def determine_adjacents(noeud) -> list:
             liste_adjacents[a].append(noeud)
             liste_adjacents[a].append(i)
             a += 1
+
+    # On retourne la liste des noeuds adjacents
     return(liste_adjacents)
 
 def recursive(liste) -> list:
@@ -46,17 +59,20 @@ def recursive(liste) -> list:
     # Entrée : La liste de chemins déja établie
     # Sortie : la liste de chemins jusqu'au noeuds suivants
     #************************************************************************
-    # On détermine le nombre de arc au départ des noeuds adjacents
+    # On détermine le nombre d'arcs adjacents aux noeuds
     for i in range(0,len(liste)):
         if i == 0:
             new_liste_arcs_départs = determine_adjacents(liste[i][-1])
         else:
-            #on filtre les éventuels doublons
+            # on filtre les éventuels doublons !
             list = determine_adjacents(liste[i][-1])
             for element in list:
                 if element not in new_liste_arcs_départs:
                     new_liste_arcs_départs.append(element)
 
+    # On compte le nombre de chemins qu'on doit créer, en ignorant les chemins:
+        # - où on revient sur un noeud déja visité
+        # - déja existant dans la liste
     nb_new_listes = 0
     for i in range(0,len(liste)): # on boucle dans notre liste existante
         if liste[i][-1] == arrivée:  # on comptabilise les chemins menant au point d'arrivée
@@ -67,6 +83,7 @@ def recursive(liste) -> list:
                 new_liste_arcs_départs[j][-1] not in liste[i] and
                 liste[i][-1] != arrivée):
                 nb_new_listes += 1
+        # On crée la variable qui doit contenir notre liste
         new_listes = [[] for i in range(0,nb_new_listes)]
 
     # Puis on renseigne les chemins possibles
@@ -85,26 +102,24 @@ def recursive(liste) -> list:
                 index += 1
     return(new_listes)
 
+# on définit le point de départ et d'arrivée
+départ = 0
+arrivée = 6
+
 # On détermine le nombre d'arcs au départ de notre noeud
 liste_arcs_départs = determine_adjacents(départ)
 
-#my_liste = recursive(liste_arcs_départs)
-#print(my_liste)
-
-#liste = recursive(my_liste)
-#print(liste)
-
+# Construction de la liste de chemins possibles
 for i in range(0,len(graphe)):
     liste_arcs_départs = recursive(liste_arcs_départs)
 
-print(liste_arcs_départs)
-
-print(liste_arcs_départs)
+print("Il y a",len(liste_arcs_départs),"chemins possibles:",liste_arcs_départs)
 
 this_distance = 0
 court_distance = 9999
 court_chemin =[]
 
+# Identification du chemin le plus court
 for element in liste_arcs_départs:
     this_distance = 0
     for i in range(0,len(element)-1):
